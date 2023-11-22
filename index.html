@@ -7,126 +7,153 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form id="form">
-        Your choice:
-        <select id="playerChoice" name="playerChoice" value="Rock">
-            <option>Rock</option>
-            <option>Papper</option>
-            <option>Scissors</option>
-        </select>
-        <button type="submit">Make choice</button>
-        <div id="roundInfor"></div>
-        <div id="gameInfor"></div>        
-    </form>
+    <div class="choices">
+        <button id="rock">Rock</button>
+        <button id="papper">Papper</button>
+        <button id="scissors">Scissors</button>
+    </div>
+    <div class="roundResult"></div>
+    <div class="result"></div>
     <button id="playAgain">Play Again</button>
-    <script>
-        // Set variable for form
-        let form = document.querySelector("#form")
-        // Set variable for round infor
-        let roundInfor = document.querySelector("#roundInfor");
-        // Set variable for game infor
-        let gameInfor = document.querySelector("#gameInfor");
+
+    <script>        
+        // Set variable for round result
+        let roundResult = document.querySelector(".roundResult");
+        // Set variable for the current game result 
+        let result = document.querySelector(".result");
         // Set variable for play again button
         let playAgain = document.querySelector("#playAgain");
-        // Set variable for player choice
-        let playerChoice = document.querySelector("#playerChoice");
-        // Set a variable round for counting rounds played
-        let round = 0;
+
         // Set variable player_win count rounds won by player
         let player_win = 0;
         // Set variable computer_win count rounds won by computer
         let computer_win = 0;
+        let tie = 0;
         // Write function chenk_win to check winner
-        function checkWin() {            
-            // If round equal 5 => return the bigger of player_win and computer_win
-            if (round === 5) {
-                if (player_win > computer_win) {
-                    gameInfor.textContent = `Player won ${player_win} rounds, computer won ${computer_win} rounds. The winner is player`;
-                } else if (player_win < computer_win){
-                    gameInfor.textContent = `Player won ${player_win} rounds, computer won ${computer_win} rounds. The winner is computer`;
-                } else {
-                    gameInfor.textContent = `Player won ${player_win} rounds, computer won ${computer_win} rounds. It is a tie`;
-                }                
-            } else {
-                gameInfor.textContent = `Player won ${player_win} rounds, computer won ${computer_win} rounds.`;
-            }
-        }            
-
-        // Set player choice
         let pChoice;
         // Set computer choice
-        let cChoice;
-        // Set an array of choice for computer
-        const comChoice = ['Rock', 'Papper', 'Scissors'];
-        
-        // Add Event Listener for all choice, if they make a choice => run check round function
-        form.addEventListener("submit", () => {
-            // Set a variable saving player choice for a round
-            pChoice = playerChoice.value;
-            // Prevent the form from being submit
-            event.preventDefault();               
+        let cChoice;        
+        const choices = document.querySelector('.choices');
+        const choicesButton = choices.querySelectorAll('button');
+        // Collect the player choice through event listener
+        choices.addEventListener('click', (event) => {
+            let target = event.target;
+            switch (target.id) {
+                case 'rock':
+                    pChoice = 'Rock';
+                    break;
+                case 'papper':
+                    pChoice = 'Papper';
+                    break;
+                case 'scissors':
+                    pChoice = 'Scissors';
+                    break;
+            };
             // Get computer choice using a random function 
             cChoice = getComputerChoice();
             // Check the round result using check round function
-            checkRound(pChoice, cChoice);   
-            // Increase the round count
-            round += 1;
+            checkRound(pChoice, cChoice); 
             // run check win function
             checkWin();
-        });
-        // Function reset game
-        function reset() {
-            // Set all variable to their initial value
-            round = 0;
-            player_win = 0;
-            computer_win = 0;
-            roundInfor.textContent = '';
-            gameInfor.textContent = '';
-        }
-        // Call function reset when you choose to reset
-        playAgain.addEventListener('click', reset);
-            
+        });  
 
+        // Set an array of choice for computer
+        const comChoice = ['Rock', 'Papper', 'Scissors'];
         // Function getcomputer choice
         function getComputerChoice() {
             // Create random index for computer choice
             let rand = Math.floor(Math.random() * comChoice.length);
             return comChoice[rand];
         }
+
         // Function for check round win
         function checkRound(choice1, choice2) {
             if (choice1 === 'Rock') {
                 if (choice2 === 'Papper') {
                     computer_win += 1;
-                    roundInfor.textContent = `You chose ${choice1}, computer chose ${choice2}, computer won this round`;
+                    roundResult.textContent = `You chose ${choice1}, computer chose ${choice2}, 
+                                              computer won this round`;
                 } else if (choice2 === 'Scissors') {
                     player_win += 1;
-                    roundInfor.textContent = `You chose ${choice1}, computer chose ${choice2}, you won this round`;
+                    roundResult.textContent = `You chose ${choice1}, computer chose ${choice2}, 
+                                              you won this round`;
                 } else {
-                    roundInfor.textContent = `You chose ${choice1}, computer chose ${choice2}, it is a tie`;
+                    tie += 1;
+                    roundResult.textContent = `You chose ${choice1}, computer chose ${choice2}, 
+                                              it is a tie`;
                 }
             } else if (choice1 === 'Papper') {
                 if (choice2 === 'Scissors') {
                     computer_win += 1;
-                    roundInfor.textContent = `You chose ${choice1}, computer chose ${choice2}, computer won this round`;
+                    roundResult.textContent = `You chose ${choice1}, computer chose ${choice2}, 
+                                              computer won this round`;
                 } else if (choice2 === 'Rock') {
                     player_win += 1;
-                    roundInfor.textContent = `You chose ${choice1}, computer chose ${choice2}, you won this round`;
+                    roundResult.textContent = `You chose ${choice1}, computer chose ${choice2}, 
+                                              you won this round`;
                 } else {
-                    roundInfor.textContent = `You chose ${choice1}, computer chose ${choice2}, it is a tie`;
+                    tie += 1;
+                    roundResult.textContent = `You chose ${choice1}, computer chose ${choice2}, 
+                                              it is a tie`;
                 }
             } else {
                 if (choice2 === 'Rock') {
                     computer_win += 1;
-                    roundInfor.textContent = `You chose ${choice1}, computer chose ${choice2}, computer won this round`;
+                    roundResult.textContent = `You chose ${choice1}, computer chose ${choice2}, 
+                                              computer won this round`;
                 } else if (choice2 === 'Papper') {
                     player_win += 1;
-                    roundInfor.textContent = `You chose ${choice1}, computer chose ${choice2}, you won this round`;
+                    roundResult.textContent = `You chose ${choice1}, computer chose ${choice2}, 
+                                              you won this round`;
                 } else {
-                    roundInfor.textContent = `You chose ${choice1}, computer chose ${choice2}, it is a tie`;
+                    tie += 1;
+                    roundResult.textContent = `You chose ${choice1}, computer chose ${choice2}, 
+                                              it is a tie`;
                 }
             }
         }
+
+        // Function reset game
+        function reset() {
+            // Set all variable to their initial value
+            tie = 0;
+            player_win = 0;
+            computer_win = 0;
+            roundResult.textContent = '';
+            result.textContent = '';
+            for (button of choicesButton) {
+                button.removeAttribute("disabled");
+            }
+        }
+        // Call function reset when you choose to reset
+        playAgain.addEventListener('click', reset);
+
+        function checkWin() {            
+            // If round equal 5 => return the bigger of player_win and computer_win
+            if (player_win === 5 || computer_win === 5) {
+                // disable the play buttons
+                
+                for (button of choicesButton) {
+                    button.disabled = 'True';
+                }
+                if (player_win > computer_win) {
+                    result.textContent = `Player won ${player_win} rounds, 
+                                             computer won ${computer_win} rounds, 
+                                             There are ${tie} tie rounds.
+                                             The winner is player`;
+                } else if (player_win < computer_win){
+                    result.textContent = `Player won ${player_win} rounds, 
+                                             computer won ${computer_win} rounds, 
+                                             there are ${tie} tie rounds.
+                                             The winner is computer`;
+                }               
+            } else {
+                result.textContent = `Player won ${player_win} rounds, 
+                                         computer won ${computer_win} rounds,
+                                         there are ${tie} tie rounds`;
+            }
+        }     
+        
     </script>
     
 </body>
